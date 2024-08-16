@@ -11,7 +11,10 @@ const routes = [
   {
     path: '/home',
     name: 'home',
-    component: HomeView
+    component: HomeView,
+    meta:{
+      layout:'main',
+    }
   },
   {
     path: '/about',
@@ -21,7 +24,10 @@ const routes = [
   {
     path: '/home/categories',
     name: 'categories',
-    component: () => import('../views/CategoriesView.vue')
+    component: () => import('../views/CategoriesView.vue'),
+    meta:{
+      layout:'main'
+    }
   }
 ]
 
