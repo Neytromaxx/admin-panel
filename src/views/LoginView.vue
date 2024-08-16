@@ -42,7 +42,7 @@ function submit(){
     .then((response) => response.json())
     .then((data) =>{
         localStorage.setItem('accessToken', data?.data?.tokens?.accessToken?.token)
-        router.push('/about')
+        router.push('/home')
     })
 }
 

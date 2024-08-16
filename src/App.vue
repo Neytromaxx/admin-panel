@@ -1,7 +1,15 @@
 <template>
+  <app-sidebar></app-sidebar>
   <router-view/>
 </template>
-
+<script>
+import AppSidebar from './components/ui/AppSidebar.vue';
+export default{
+  components:{
+    AppSidebar
+  }
+}
+</script>
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
