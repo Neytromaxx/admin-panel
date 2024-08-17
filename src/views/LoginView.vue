@@ -41,10 +41,19 @@ function submit(){
     })
     .then((response) => response.json())
     .then((data) =>{
-        localStorage.setItem('accessToken', data?.data?.tokens?.accessToken?.token)
-        router.push('/home')
+        // if(user.value ==='900474227' && pass.value === 'superadmin'){
+            localStorage.setItem('accessToken', data?.data?.tokens?.accessToken?.token)
+            console.log(data?.data?.tokens?.accessToken?.token)
+            router.push('/home/categories')
+        // }
+        // else{
+        //     alert('user yoki parol xato!')
+        //     user.value = ''
+        //     pass.value = ''
+        // }
     })
 }
+
 
 </script>
 
