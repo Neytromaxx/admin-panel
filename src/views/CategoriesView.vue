@@ -1,4 +1,5 @@
 <template>
+    
     <div class="p-4 sm:ml-64">
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -20,28 +21,19 @@
                         Actions
                     </th>
                     <th scope="col" class="px-6 py-3" style="text-align: right;">
-                        <button type="button" class="px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add a category</button>
+                        <button @click="modal = true" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" >
+                            Add a category
+                        </button>
                     </th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        Apple MacBook Pro 17"
-                    </th>
-                    <td class="px-6 py-4">
-                        Silver
-                    </td>
-                    <td class="px-6 py-4">
-                        Laptop
-                    </td>
-                    <td class="px-6 py-4">
-                        $2999
-                    </td>
-                    <td class="px-6 py-4 text-center" style="text-align: left;">
-                        <button type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Edit</button>
-                        <button type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
-                        <!-- <button type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Delete</button> -->
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                    v-for="(category, index) in categories" :key="index">
+                    <td class="border px-4 py-2">{{ category.EnName }}</td>
+                    <td class="border px-4 py-2">{{ category.RuName }}</td>
+                    <td class="border px-4 py-2">
+                      <img :src="category.picture" alt="Category Picture" width="100" />
                     </td>
                     <td class="px-6 py-4">
 
@@ -51,45 +43,36 @@
         </table>
     </div>
 </div>
-  <!-- <div>
-     <table>
-        <tr>
-            <th>№</th>
-            <th>name En</th>
-            <th>name Ru</th>
-            <th>Images</th>
-            <th>Actions</th>
-            <th><button>Add Category</button></th>
-        </tr>
-        <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-        </tr>
-    </table> 
-  </div> -->
+<Teleport to="body">
+<app-modal v-if="modal" @close="modal = false ">
+    <request-add @created="modal=false"></request-add>
+</app-modal>
+</Teleport>
 </template>
 
-<script>
-export default {
+<script setup>
+import { ref } from 'vue';
 
-}
+import AppModal from '@/components/ui/AppModal.vue'
+import RequestAdd from '@/components/request/RequestAdd.vue'
+
+const modal = ref(false)
+
+const categories = ref([]);
+
+// const addCategory = (category) => {
+//   categories.value.push({
+//     EnName: category.EnName,
+//     RuName: category.RuName,
+//     picture: category.picture,
+//   });
+//   console.log(addCategory)
+// };
+
 </script>
 
 <style scoped>
     .p-4{
         margin-top: 50px;
     }
-    /* div{
-        position: relative;
-        
-    }
-    table, tr, th{
-        border: 1px solid;
-        border-collapse: collapse;
-        padding: 25px;
-    } */
 </style>

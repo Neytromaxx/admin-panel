@@ -39,18 +39,17 @@ function submit(){
         'Content-Type':'application/json'
        }
     })
-    .then((response) => response.json())
+    .then((data) => data.json())
     .then((data) =>{
-        // if(user.value ==='900474227' && pass.value === 'superadmin'){
+        if(data?.success){
             localStorage.setItem('accessToken', data?.data?.tokens?.accessToken?.token)
-            console.log(data?.data?.tokens?.accessToken?.token)
             router.push('/home/categories')
-        // }
-        // else{
-        //     alert('user yoki parol xato!')
-        //     user.value = ''
-        //     pass.value = ''
-        // }
+        }
+        else{
+            alert('user yoki parol xato!')
+            user.value = ''
+            pass.value = ''
+        }
     })
 }
 
