@@ -29,11 +29,11 @@
             </thead>
             <tbody>
                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                    v-for="(category, index) in categories" :key="index">
-                    <td class="border px-4 py-2">{{ category.EnName }}</td>
-                    <td class="border px-4 py-2">{{ category.RuName }}</td>
+                    v-for="(prcategoriesoducts, index) in categories" :key="index">
+                    <td class="border px-4 py-2">{{ categories.EnName }}</td>
+                    <td class="border px-4 py-2">{{ categories.RuName }}</td>
                     <td class="border px-4 py-2">
-                      <img :src="category.picture" alt="Category Picture" width="100" />
+                      <img :src="categories.picture" alt="Category Picture" width="100" />
                     </td>
                     <td class="px-6 py-4">
 
@@ -53,21 +53,13 @@
 <script setup>
 import { ref } from 'vue';
 
+
 import AppModal from '@/components/ui/AppModal.vue'
 import RequestAdd from '@/components/request/RequestAdd.vue'
 
 const modal = ref(false)
 
 const categories = ref([]);
-
-// const addCategory = (category) => {
-//   categories.value.push({
-//     EnName: category.EnName,
-//     RuName: category.RuName,
-//     picture: category.picture,
-//   });
-//   console.log(addCategory)
-// };
 
 </script>
 

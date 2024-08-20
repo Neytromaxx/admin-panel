@@ -24,10 +24,12 @@
 <script setup>
 import router from "@/router";
 import { ref } from "vue";
+import { useStore } from "vuex";
+
 
 const user = ref('')
 const pass = ref('')
-
+const store = useStore()
 function submit(){
     fetch('https://autoapi.dezinfeksiyatashkent.uz/api/auth/signin',{
        method: 'POST', 
@@ -43,6 +45,9 @@ function submit(){
     .then((data) =>{
         if(data?.success){
             localStorage.setItem('accessToken', data?.data?.tokens?.accessToken?.token)
+            const accessToken = localStorage.getItem(('accessToken'))
+            store.dispatch('updateToken', accessToken)
+            console.log(accessToken)
             router.push('/home/categories')
         }
         else{

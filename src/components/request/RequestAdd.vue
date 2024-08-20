@@ -23,11 +23,16 @@
 </template>
 
 <script setup>
-import {defineEmits, ref} from 'vue'
+import {computed, defineEmits, ref} from 'vue'
+import { useStore } from 'vuex'
+
+
 const emits = defineEmits(['created'])
 const EnName = ref('')
 const RuName = ref('')
 const picFile = ref(null)
+const store = useStore()
+const accessToken = computed(()=> store.getters.getToken) 
 
 const handleFileChange = (event)=>{
     if(event.target && event.target.files.length>0){
@@ -44,40 +49,24 @@ const submit = async () =>{
     formData.append('RuName',RuName.value);
     formData.append('Picture',picFile.value);
 
-    try{
-        const response = await fetch('https://autoapi.dezinfeksiyatashkent.uz/api/categories',{
-            method: 'POST',
-            headers: {
-                'Authorization': 'Bearer YOUR_ACCESS_TOKEN',
-            },
-            body: formData,
-        });
+    fetch('https://autoapi.dezinfeksiyatashkent.uz/api/categories',{
+        method: 'POST',
+        body: formData,
+        headers: {
+            'Authorization': `Bearer ${accessToken.value}`,
+        },
         
-        const responseData = response.json()
-        console.log('Response data:', responseData)
-        if(!response.ok){
-            throw new Error('Failed to submit data');
+    }).then((res)=>res.json())
+      .then((res)=>{
+        if(res.success){
+            emits('created')
+            alert('jonatildi')
         }
-
-        
-        console.log('Success:', responseData)
-        emits('created', responseData)
-    }
-    catch(error){
+      }).catch((error)=>{
         console.error('Error', error)
-    }
-
-    
+    })
 }
-// export default {
-//     emits:['created'],
-//     setup(_, {emit}){
-//     const submit = (values) =>{
-//       console.log(values)
-//       emit('created')
-//     }
-// }
-// }
+
 </script>
 
 <style>
