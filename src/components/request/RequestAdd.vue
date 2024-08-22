@@ -23,14 +23,19 @@
 </template>
 
 <script setup>
-import {computed, defineEmits, ref} from 'vue'
+import {computed, defineEmits, ref, } from 'vue'
 import { useStore } from 'vuex'
 
 
 const emits = defineEmits(['created'])
+// const props = defineProps({fletchFunction:{
+//   type: Function,
+//   required: true,
+// }})
 const EnName = ref('')
 const RuName = ref('')
 const picFile = ref(null)
+
 const store = useStore()
 const accessToken = computed(()=> store.getters.getToken) 
 
@@ -45,22 +50,24 @@ const handleFileChange = (event)=>{
 
 const submit = async () =>{
     const formData = new FormData();
-    formData.append('EnName',EnName.value);
-    formData.append('RuName',RuName.value);
-    formData.append('Picture',picFile.value);
+    formData.append('name_en',EnName.value);
+    formData.append('name_ru',RuName.value);
+    formData.append('images',picFile.value);
 
-    fetch('https://autoapi.dezinfeksiyatashkent.uz/api/categories',{
+    fetch(`https://autoapi.dezinfeksiyatashkent.uz/api/categories`,{
         method: 'POST',
         body: formData,
         headers: {
             'Authorization': `Bearer ${accessToken.value}`,
+            
         },
+        
         
     }).then((res)=>res.json())
       .then((res)=>{
         if(res.success){
-            emits('created')
-            alert('jonatildi')
+          // props.fletch()
+          emits('created')
         }
       }).catch((error)=>{
         console.error('Error', error)
