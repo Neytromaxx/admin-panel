@@ -23,6 +23,46 @@ const routes = [
     meta:{
       layout:'main'
     }
+  },
+  {
+    path: '/home/brands',
+    name: 'brands',
+    component: () => import('../views/BrandsView.vue'),
+    meta:{
+      layout:'main'
+    }
+  },
+  {
+    path: '/home/cities',
+    name: 'cities',
+    component: () => import('../views/CitiesView.vue'),
+    meta:{
+      layout:'main'
+    }
+  },
+  {
+    path: '/home/locations',
+    name: 'locations',
+    component: () => import('../views/LocationsView.vue'),
+    meta:{
+      layout:'main'
+    }
+  },
+  {
+    path: '/home/cars',
+    name: 'cars',
+    component: () => import('../views/CarsView.vue'),
+    meta:{
+      layout:'main'
+    }
+  },
+  {
+    path: '/home/models',
+    name: 'models',
+    component: () => import('../views/ModelsView.vue'),
+    meta:{
+      layout:'main'
+    }
   }
 ]
 

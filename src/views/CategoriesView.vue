@@ -54,7 +54,7 @@
 </div>
 <Teleport to="body">
 <app-modal v-if="modal" @close="modal = false ">
-    <request-add @created="modal=false" :fletchFunction="fletchcard()"></request-add>
+    <request-add @created="modal=false"></request-add>
 </app-modal>
 </Teleport>
 </template>
@@ -69,9 +69,7 @@ const modal = ref(false)
 const categories = ref([]);
 
 async function fletchcard() {
-  const res = await fetch(
-    "https://autoapi.dezinfeksiyatashkent.uz/api/categories"
-  );
+  const res = await fetch("https://autoapi.dezinfeksiyatashkent.uz/api/categories");
   const data = await res.json();
   categories.value = data?.data;
 }
