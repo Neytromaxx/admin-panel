@@ -119,7 +119,7 @@ const onModal = () =>{
 }
 
 async function fletchcard() {
-const res = await fetch("https://autoapi.dezinfeksiyatashkent.uz/api/brands");
+const res = await fetch("https://autoapi.dezinfeksiyatashkent.uz/api/locations");
 const data = await res.json();
 products.value = data?.data;
 }
@@ -129,7 +129,7 @@ const submit = () => {
 const formData = new FormData();
 formData.append("title", title.value);
 formData.append("images", picFile.value);
-fetch(`https://autoapi.dezinfeksiyatashkent.uz/api/brands/`, {
+fetch(`https://autoapi.dezinfeksiyatashkent.uz/api/locations/`, {
   method: "POST",
   body: formData,
   headers: {
