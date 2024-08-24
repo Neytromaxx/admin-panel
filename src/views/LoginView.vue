@@ -1,23 +1,21 @@
 <template>
-    <form @submit.prevent="submit">
-        <div class="container">
-            <div class="inputs">
-                  <input 
-                      type="text" 
-                      v-model="user" 
-                      required
-                      placeholder="Phone number"
-                  >
-                  <input 
-                      type="password" 
-                      v-model="pass"
-                      autocomplete="no"
-                      required
-                      placeholder="Parol"
-                  >
-            </div>
-            <button type="submit">Kirish</button>
-        </div>
+    <form @submit.prevent="submit" class="max-w-sm mx-auto top">
+      <div class="mb-5">
+        <label for="text" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
+        <input type="text"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            v-model="user"    
+            placeholder="Phone number"
+            required />
+      </div>
+      <div class="mb-5">
+        <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your password</label>
+        <input type="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+            v-model="pass"
+            autocomplete="no"
+            placeholder="Parol"
+            required />
+      </div>
+      <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
     </form>
 </template>
 
@@ -61,39 +59,7 @@ function submit(){
 </script>
 
 <style scoped>
-    .container{
-        margin: 0 auto;
-        width: 370px;
-        height: 320px;
-        background-color: #f6f8f9;
-        border: 1px solid #f6f8f9;
-        border-radius: 1rem;
-        margin-top: 150px;
-    }
-    .inputs{
-        margin-top: 50px;
-    }
-    input{
-        width: 280px;
-        height: 35px;
-        margin-top: 25px;
-        padding: 5px;
-        border: 1px solid black;
-        border-radius: 0.5rem;
-        font-size: 20px;
-    }
-    button{
-        width: 300px;
-        height: 45px;
-        margin-top: 35px;
-        padding: 5px;
-        border: 1px solid black;
-        border-radius: .4rem;
-        background-color: #11056c;
-        color: #f6f8f9;
-        cursor: pointer;
-    }
-    .invalid{
-        color: red;
+    .top{
+        margin-top: 100px;
     }
 </style>
