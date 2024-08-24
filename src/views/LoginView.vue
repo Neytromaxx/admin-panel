@@ -43,7 +43,6 @@ function submit(){
     })
     .then((data) => data.json())
     .then((data) =>{
-        console.log(data)
         if(data?.success){
             localStorage.setItem('accessToken', data?.data?.tokens?.accessToken?.token)
             const accessToken = localStorage.getItem(('accessToken'))
