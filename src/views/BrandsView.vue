@@ -25,20 +25,20 @@
                 </thead>
                 <tbody>
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                        v-for="(products, index) in products" :key="index">
+                        v-for="(product, index) in products" :key="index">
                         <td class="border px-4 py-2">{{index+1}}</td>
-                        <td class="border px-4 py-2">{{products?.title}}</td>
+                        <td class="border px-4 py-2">{{product?.title}}</td>
                         <td class="border px-4 py-2">
                           <img :src="
                             'https://autoapi.dezinfeksiyatashkent.uz/api/uploads/images/' +
-                            products?.image_src" alt="Category Picture" width="100" />
+                            product?.image_src" alt="Category Picture" width="100" />
                         </td>
                         <td class="px-6 py-4">
-                            <button class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+                            <button @click="modalEdit = true, editBrandValues(product)" class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
                               Edit
                             </button>
                             &nbsp;
-                            <button @click="modalDel = true" type="button" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-medium rounded px-3 py-2 text-sm text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+                            <button @click="openDelModal(product.id)" type="button" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-medium rounded px-3 py-2 text-sm text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
                                 Delete
                             </button>
                         </td>
@@ -106,7 +106,7 @@
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                     </svg>
                     <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete this product?</h3>
-                    <button data-modal-hide="popup-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                    <button @click="deleteBrands()" data-modal-hide="popup-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
                         Yes, I'm sure
                     </button>
                     <button @click="modalDel = false" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">No, cancel</button>
@@ -114,6 +114,42 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal edit -->
+<div v-if="modalEdit"  tabindex="-1" aria-hidden="true" class="a overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-md max-h-full" >
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700" >
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                    Edit Product
+                </h3>
+                <button type="button" @click="modalEdit = false"  class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <form @submit.prevent="editBrands" class="p-4 md:p-5">
+                <div class="grid gap-4 mb-4 grid-cols-2">
+                    <div class="col-span-2">
+                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name En *</label>
+                        <input v-model="data.title" @input="inputTitle($event.target.value)" type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                    </div>
+                    <div class="col-span-2">
+                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Picture *</label>
+                        <input @change="handleFileChange($event)" @input="inputpicFile($event.target.files[0])" type="file" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                    </div>
+
+                </div>
+                <button  type="submit"   class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    <img src="../assets/img/pencil-square.svg" alt=""> &nbsp;   
+                    Edit product
+                </button>
+            </form>
+        </div>
+    </div>
+</div> 
 </Teleport>
 </template>
 
@@ -123,12 +159,51 @@ import { useStore } from 'vuex';
 
 const modal = ref(false)
 const modalDel = ref(false)
+const modalEdit = ref(false)
+
 const products = ref([]);
+
 const title = ref('')
 const picFile = ref(null)
+
+const productId = ref(null)
+
+const editTitle = ref('')
+const editpicFile = ref('')
+
 const store = useStore()
 const accessToken = computed(()=> store.getters.getToken) 
 
+const openDelModal = (id)=>{
+    productId.value = id;
+    modalDel.value = true;
+}
+
+const closeDelModal = ()=>{
+    productId.value = null;
+    modalDel.value = false;
+}
+
+const inputTitle = (product) =>{
+    editTitle.value = product
+}
+const inputpicFile = (product) =>{
+    editpicFile.value = product
+}
+const data = ref({
+    title:'',
+    images: null
+})
+const onChange = () =>{
+    data.value.title = editTitle,
+    data.value.images = editpicFile
+}
+const editBrandValues = (product) =>{
+    productId.value = product.id,
+    editTitle.value = product.title,
+    editpicFile.value = product.images,
+    onChange()
+}
 const handleFileChange = (event)=>{
     if(event.target && event.target.files.length>0){
     picFile.value = event?.target?.files[0]
@@ -142,12 +217,20 @@ const onModal = () =>{
     modal.value = true
 }
 
-async function fletchcard() {
-  const res = await fetch("https://autoapi.dezinfeksiyatashkent.uz/api/brands");
-  const data = await res.json();
-  products.value = data?.data;
-}
-fletchcard();
+const fetchBrands = async () => {
+    try {
+        const res = await fetch("https://autoapi.dezinfeksiyatashkent.uz/api/brands");
+        if (!res.ok) {
+            throw new Error(`HTTP xato: ${res.status}`);
+        }
+        const data = await res.json();
+        products.value = data?.data;
+    } catch (error) {
+        console.error('Error:', error);
+    }
+};
+
+fetchBrands();
 
 const submit = () => {
   const formData = new FormData();
@@ -164,7 +247,7 @@ const submit = () => {
     .then((res) => {
       if (res.success) {
         modal.value = false;
-        fletchcard();
+        fetchBrands();
         title.value = "";
         picFile.value = "";
       }
@@ -174,6 +257,52 @@ const submit = () => {
     });
 };
 
+const deleteBrands = async () =>{
+    try{
+        const response = await fetch(`https://autoapi.dezinfeksiyatashkent.uz/api/brands/${productId.value}`,{
+            method: 'DELETE',
+            headers:{
+                'Authorization': `Bearer ${accessToken.value}`,
+                'Cache-Control': 'no-cache'
+            }
+        });
+        if (response.ok){
+            products.value = products.value.filter(product => product.id !== productId.value);
+            fetchBrands();
+            closeDelModal();
+        }
+        else{
+            console.error('Error:', response.status);
+        }
+    }catch (error) {
+    console.error('Error:', error.message);
+}
+}
+
+const editBrands = async () =>{
+    const formData = new FormData();
+    formData.append('title', editTitle.value);
+    formData.append('images', editpicFile.value);
+
+    try{
+        const res = await fetch(`https://autoapi.dezinfeksiyatashkent.uz/api/brands/${productId.value}`,{
+            method: 'PUT',
+            body: formData,
+            headers: {
+                'Authorization': `Bearer ${accessToken.value}`,
+            }
+        });
+        const result = await res.json();
+        if (result.success) {
+            fetchBrands();
+            modalEdit.value = false;
+        }else{
+            console.error('Error:', result.message);
+        }
+    }catch (error) {
+        console.error('Error:', error.message);
+    }
+}
 </script>
 
 <style scoped>
