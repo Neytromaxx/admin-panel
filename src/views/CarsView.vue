@@ -34,16 +34,16 @@
               </thead>
               <tbody>
                   <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                      v-for="(products, index) in products" :key="index">
+                      v-for="(product, index) in products" :key="index">
                       <td class="border px-4 py-2">{{index+1}}</td>
-                      <td class="border px-4 py-2">{{products?.color}}</td>
-                      <td class="border px-4 py-2">{{products?.brand?.title}}</td>
-                      <td class="border px-4 py-2">{{products?.model?.name}}</td>
-                      <td class="border px-4 py-2">{{products?.category?.name_en}}</td>
-                      <td class="border px-4 py-2">{{products?.location?.name}}</td>
+                      <td class="border px-4 py-2">{{product?.color}}</td>
+                      <td class="border px-4 py-2">{{product?.brand?.title}}</td>
+                      <td class="border px-4 py-2">{{product?.model?.name}}</td>
+                      <td class="border px-4 py-2">{{product?.category?.name_en}}</td>
+                      <td class="border px-4 py-2">{{product?.location?.name}}</td>
                       
                       <td class="px-6 py-4">
-                          <button class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+                          <button @click="modalEdit = true, editProduct(item,index)" class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
                             Edit
                           </button>
                           &nbsp;
@@ -776,10 +776,12 @@ import { useStore } from 'vuex';
 
 const modal = ref(false)
 const modalDel = ref(false)
+const modalEdit = ref(false)
 const products = ref([]);
-const color = ref('')
-const brand = ref('')
-const model = ref('')
+// const color = ref('')
+// const brand = ref('')
+// const model = ref('')
+const productId  = ref('')
 const category = ref('')
 const location = ref('')
 const store = useStore()
@@ -909,6 +911,150 @@ const submit = () => {
     })
     .catch((err) => {
       console.log(err.message);
+    });
+};
+
+const data = ref({
+  brand_id: "",
+  model_id: "",
+  city_id:"",
+  category_id:"",
+  color:"",
+  year:null,
+  seconds:"",
+
+  // images1:null,
+  // images2:null,
+  max_speed:"",
+  max_people:"",
+  transmission:"",
+  motor:"",
+  drive_side:"",
+  petrol:"",
+  limitperday:"",
+  deposit:"",
+  premium_protection:"",
+  // price_in_aed:"",
+  // price_in_usd:"",
+  // price_in_aed_sale:"",
+  // price_in_usd_sale:"",
+  // location_id:"",
+  // inclusive:Boolean,
+  // cover:null
+
+});
+const indextovar = ref("")
+const editProduct = (item,index) => {
+   indextovar.value = index
+   productId.value = item.id;
+   inputbrand.value = item.brand_id
+   inputmodel.value = item.model_id
+   inputcity.value = item.city_id
+   inputcategory.value = item.category_id
+   inputcolor.value = item.color
+   inputyear.value = item.year
+   inputseconds.value = item.seconds
+
+  //  inputimgcar.value = item.car_images[0].image.src
+  //  inputimgmain.value = item.car_images[1].image.src
+   inputspeed.value = item.max_speed
+   inputpeople.value = item.max_people
+   inputtransmission.value = item.transmission
+   inputmotor.value = item.motor
+   inputdrive.value = item.drive_side
+   inputfuel.value = item.petrol
+   inputlimit.value = item.limitperday
+   inputdeposit.value = item.deposit
+   inputpremium.value = item.premium_protection
+  //  inputpriceead.value = item.price_in_aed
+  //  inputpriceusd.value = item.price_in_usd
+  //  inputpriceeadotd.value = item.price_in_aed_sale
+  //  inputpriceusdotd.value = item.price_in_usd_sale
+  //  inputlocation.value = item.location_id
+  //  inputinclusive.value =item.inclusive
+  //  inputimgcover.value = item.car_images[2].image.src
+  onChange();
+
+};
+
+function onChange(){
+   data.value.brand_id = inputbrand.value,
+   data.value.model_id =  inputmodel.value
+   data.value.city_id = inputcity.value,
+   data.value.category_id = inputcategory.value,
+   data.value.color =  inputcolor.value
+   data.value.year = inputyear.value,
+   data.value.seconds =  inputseconds.value
+  
+  //  data.value.images1 =  inputimgcar.value
+  //  data.value.images2 = inputimgmain.value,
+   data.value.max_speed =  inputspeed.value
+   data.value.max_people = inputpeople.value,
+   data.value.transmission =  inputtransmission.value
+   data.value.motor = inputmotor.value,
+   data.value.drive_side =  inputdrive.value,
+   data.value.petrol = inputfuel.value,
+   data.value.limitperday =  inputlimit.value,
+   data.value.deposit = inputdeposit.value,
+   data.value.premium_protection =  inputpremium.value,
+  //  data.value.price_in_aed = inputpriceead.value,
+  //  data.value.price_in_usd =  inputpriceusd.value,
+  //  data.value.price_in_aed_sale = inputpriceeadotd.value,
+  //  data.value.price_in_usd_sale = inputpriceusdotd.value,
+  //  data.value.location_id = inputlocation.value,
+  //  data.value.inclusive =  inputinclusive.value
+  //  data.value.cover =  inputimgcover.value
+  console.log(data)
+}
+
+const editCars = () => {
+  
+  onChange();
+  const formData = new FormData();
+  formData.append("brand_id", data.value.brand_id);
+  formData.append("model_id", data.value.model_id);
+  formData.append("city_id", data.value.city_id);
+  formData.append("category_id", data.value.category_id);
+  formData.append("color", data.value.color);
+  formData.append("year", data.value.year);
+  formData.append("seconds", data.value.seconds);
+  
+  // formData.append("images", data.value.images1);
+  // formData.append("images", data.value.images2);
+  formData.append("max_speed", data.value.max_speed);
+  formData.append("max_people", data.value.max_people);
+  formData.append("transmission", data.value.transmission);
+  formData.append("motor", data.value.motor);
+  formData.append("drive_side", data.value.drive_side);
+  formData.append("petrol", data.value.petrol);
+  formData.append("limitperday", data.value.limitperday);
+  formData.append("deposit", data.value.deposit);
+  formData.append("premium_protection", data.value.premium_protection);
+  // formData.append("price_in_aed", data.value.price_in_aed);
+  // formData.append("price_in_usd", data.value.price_in_usd);
+  // formData.append("price_in_aed_sale", data.value.price_in_aed_sale);
+  // formData.append("price_in_usd_sale", data.value.price_in_usd_sale); 
+  // formData.append("location_id", data.value.location_id);
+  // formData.append("inclusive", data.value.inclusive);
+  // formData.append("cover", data.value.cover);
+ 
+  fetch(`https://autoapi.dezinfeksiyatashkent.uz/api/cars/${productId.value}`, {
+    method: "PUT",
+    body: formData,
+    headers: {
+      Authorization: `Bearer ${accessToken.value}`,
+      // "Content-Type": "multipart/form-data"
+    },
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      if (res.success) {
+        modalEdit(false);
+        fetchCars();
+      }
+    })
+    .catch((error) => {
+      console.error("error:", error)
     });
 };
 
