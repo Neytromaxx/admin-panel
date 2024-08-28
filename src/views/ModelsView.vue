@@ -161,6 +161,8 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 const modal = ref(false)
 const modalDel = ref(false)
@@ -266,10 +268,30 @@ fetch(`https://autoapi.dezinfeksiyatashkent.uz/api/models`, {
     if (res.success) {
       modal.value = false;
       fetchModels();
+      toast(`Muvaffaqiyatli qo'shildi`, {
+          "type": "success",
+          "position": "top-center",
+          "autoClose": 2500,
+          "transition": "flip",
+          "dangerouslyHTMLString": true
+        })
+    }else{
+        toast(`Xatolik! ${res.statusText}`, {
+              "type": "error",
+              "position": "top-center",
+              "autoClose": 2500,
+              "transition": "flip",
+              "dangerouslyHTMLString": true
+            })
     }
   })
-  .catch((err) => {
-    console.log(err.message);
+  .catch((err) => {toast(`Xatolik! ${err.message}`, {
+              "type": "error",
+              "position": "top-center",
+              "autoClose": 2500,
+              "transition": "flip",
+              "dangerouslyHTMLString": true
+            })
   });
 };
 
@@ -284,9 +306,29 @@ const deleteModels = async () =>{
         if (response.ok) {
             fetchModels();
             closeDelModal();
+            toast(`Muvaffaqiyatli o'chirildi`, {
+          "type": "info",
+          "position": "top-center",
+          "autoClose": 2500,
+          "transition": "flip",
+          "dangerouslyHTMLString": true
+        })
+        }else{
+            toast(`Xatolik! ${response.statusText}`, {
+              "type": "error",
+              "position": "top-center",
+              "autoClose": 2500,
+              "transition": "flip",
+              "dangerouslyHTMLString": true
+            })
         }
-    }catch (error) {
-        console.error('Error:', error.message);
+    }catch (error) {toast(`Xatolik! ${error.message}`, {
+              "type": "error",
+              "position": "top-center",
+              "autoClose": 2500,
+              "transition": "flip",
+              "dangerouslyHTMLString": true
+            })
     }
 }
 
@@ -307,12 +349,29 @@ const editModels = async () => {
           if (result.success) {
               modalEdit.value = false;
               console.log(result);
-              fetchModels(); 
-          } else {
-              console.error('Error:', result.message);
+              fetchModels();
+              toast(`Muvaffaqiyatli tahrirlandi`, {
+          "type": "success",
+          "position": "top-center",
+          "autoClose": 2500,
+          "transition": "flip",
+          "dangerouslyHTMLString": true
+        })
+          } else {toast(`Xatolik! ${result.statusText}`, {
+              "type": "error",
+              "position": "top-center",
+              "autoClose": 2500,
+              "transition": "flip",
+              "dangerouslyHTMLString": true
+            })
           }
-      } catch (error) {
-          console.error('Error:', error);
+      } catch (error) {toast(`Xatolik! ${error.message}`, {
+              "type": "error",
+              "position": "top-center",
+              "autoClose": 2500,
+              "transition": "flip",
+              "dangerouslyHTMLString": true
+            })
       }
   };
 </script>

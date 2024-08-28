@@ -171,6 +171,9 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
+
 // modals ->
 const modal = ref(false);
 const modalDel = ref(false);
@@ -274,12 +277,31 @@ const submit = async () => {
         if (result.success) {
             modal.value = false;
             console.log(result);
-            fetchCategories(); 
+            fetchCategories();
+            toast("Ma'lumot qo'shildi!", {
+              "type": "success",
+              "position": "top-center",
+              "autoClose": 2500,
+              "transition": "flip",
+              "dangerouslyHTMLString": true
+            })
         } else {
-            console.error('Error:', result.message);
+            toast(`Xatolik! ${result.message}`, {
+              "type": "error",
+              "position": "top-center",
+              "autoClose": 2500,
+              "transition": "flip",
+              "dangerouslyHTMLString": true
+            })
         }
     } catch (error) {
-        console.error('Error:', error);
+        toast(`Xatolik! ${error}`, {
+              "type": "error",
+              "position": "top-center",
+              "autoClose": 2500,
+              "transition": "flip",
+              "dangerouslyHTMLString": true
+            })
     }
 };
 
@@ -299,8 +321,21 @@ const deleteCategory = async () => {
             console.log('Element o\'chirildi:', categoryId.value);
             fetchCategories(); 
             closeDelModal();
+            toast(`Ma'lumot o'chirildi! ${response.ok}`, {
+              "type": "info",
+              "position": "top-center",
+              "autoClose": 2500,
+              "transition": "flip",
+              "dangerouslyHTMLString": true
+            })
         } else {
-            console.error('Error:', response.status);
+            toast(`${response.status}`, {
+              "type": "error",
+              "position": "top-center",
+              "autoClose": 2500,
+              "transition": "flip",
+              "dangerouslyHTMLString": true
+            })
         }
         
     } catch (error) {
@@ -325,13 +360,31 @@ const editCategory = async () => {
         const result = await res.json();
         if (result.success) {
             modalEdit.value = false;
-            console.log(result);
-            fetchCategories(); 
+            fetchCategories();
+            toast(`Tahrirlandi!`, {
+              "type": "info",
+              "position": "top-center",
+              "autoClose": 2500,
+              "transition": "flip",
+              "dangerouslyHTMLString": true
+            })
         } else {
-            console.error('Error:', result.message);
+            toast(`Xatolik! ${result.message}`, {
+              "type": "error",
+              "position": "top-center",
+              "autoClose": 2500,
+              "transition": "flip",
+              "dangerouslyHTMLString": true
+            })
         }
     } catch (error) {
-        console.error('Error:', error);
+        toast(`Xatolik! ${error}`, {
+              "type": "error",
+              "position": "top-center",
+              "autoClose": 2500,
+              "transition": "flip",
+              "dangerouslyHTMLString": true
+            })
     }
 };
 </script>

@@ -47,7 +47,7 @@
                             Edit
                           </button>
                           &nbsp;
-                          <button @click="modalDel = true" type="button" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-medium rounded px-3 py-2 text-sm text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+                          <button @click="openDelModal(product.id)" type="button" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-medium rounded px-3 py-2 text-sm text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
                               Delete
                           </button>
                       </td>
@@ -82,313 +82,143 @@
           </div>
           <!-- Modal body -->
           <form @submit.prevent="submit" class="p-4 md:p-5">
-              <div class="grid gap-4 mb-4 grid-cols-2">
-                <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Category</p></label
-            >
-            <select
-              required
-              name=""
-              id=""
-              @input="categoryinput($event.target.value)"
-          
-            >
-      
-             <option  v-for="item in category" :key="item" :value='item.id'>{{ item.name_en }}</option>  
-            </select>
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Brand</p></label
-            >
-            <select
-              required
-              name=""
-              id=""
-              @input="brandinput($event.target.value)"
-            >
-            <option  v-for="item in brands" :key="item" :value='item.id'>{{ item.title }}</option>
-            </select>
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Model</p></label
-            >
-            <select
-              required
-              name=""
-              id=""
-              @input="modelinput($event.target.value)"
+              <div class="grid gap-4 mb-4 grid-cols-2"> 
+                <div class="col-span-2">
+                  <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category *</label>
+                  <select required @input="categoryinput($event.target.value)" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option  v-for="item in category" :key="item" :value='item.id'>{{ item.name_en }}</option>  
+                  </select>
+                </div>
+                <div class="col-span-2">
+                  <label for="brand" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Brand *</label>
+                  <select @input="brandinput($event.target.value)" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option  v-for="item in brands" :key="item" :value='item.id'>{{ item.title }}</option>
+                  </select>
+                </div>
               
-            >
-            <option  v-for="item in models" :key="item" :value='item.id'>{{ item.name }}</option>
-     
-            </select>
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Location</p></label
-            >
-            <select
-              required
-              name=""
-              id=""
-              @input="locationinput($event.target.value)"
-            >
-              <option v-for="item in location" :key="item" :value='item.id' >{{ item.name }}</option>
-             
-            </select>
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>City</p></label
-            >
-            <select
-              required
-              name=""
-              id=""
-              @input="cityinput($event.target.value)"
-            >
-            <option v-for="item in city" :key="item" :value='item.id' >{{ item.name }}</option>
-            </select>
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Color</p></label
-            >
-            <input
-              class="colorinput"
-              type="color"
-              value=""
-              v-model="inputcolor"
-            />
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Year</p></label
-            >
-            <input type="number" v-model="inputyear" />
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Seconds</p></label
-            >
-            <input type="number" v-model="inputseconds" />
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Speed</p></label
-            >
-            <input type="number" v-model="inputspeed" />
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Max People</p></label
-            >
-            <select
-              required
-              name=""
-              id=""
-              @input="peopleinput($event.target.value)"
-            >
-              <option value="" disabled selected hidden>Select People</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="auto">auto</option>
-            </select>
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Motor</p></label
-            >
-            <input type="text" v-model="inputmotor" />
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Transmission</p></label
-            >
-            <select
-              required
-              name=""
-              id=""
-              @input="transmissioninput($event.target.value)"
-            >
-              <option value="" disabled selected hidden>
-                Select transmission
-              </option>
-              <option value="Mechanics">Mechanics</option>
-              <option value="Automatic box">Automatic box</option>
-              <option value="Mechanics and Automatic">
-                Mechanics and Automatic
-              </option>
-              <option value="Electric">Electric</option>
-              <option value="defauld">defauld</option>
-            </select>
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Drive Side</p></label
-            >
-            <input type="text" v-model="inputdrive" />
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Fuel</p></label
-            >
-            <select
-              required
-              name=""
-              id=""
-              @input="fuelinput($event.target.value)"
-            >
-              <option value="" disabled selected hidden>Select Fuel</option>
-              <option value="Gas cylinder">Gas cylinder</option>
-              <option value="Gasoline tank">Gasoline tank</option>
-              <option value="Methane cylinder">Methane cylinder</option>
-              <option value="Electric battery">Electric battery</option>
-              <option value="defauld">defauld</option>
-            </select>
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Limit Per Day</p></label
-            >
-            <input type="number" v-model="inputlimit" />
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Deposit</p></label
-            >
-            <input type="number" v-model="inputdeposit" />
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Premium Protection Price</p></label
-            >
-            <input type="text" v-model="inputpremium" />
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Price in AED</p></label
-            >
-            <input type="text" v-model="inputpriceead" />
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Price in AED (Otd)</p></label
-            >
-            <input type="text" v-model="inputpriceeadotd" />
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Price in USD</p></label
-            >
-            <input type="text" v-model="inputpriceusd" />
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Price in USD(Otd)</p></label
-            >
-            <input type="text" v-model="inputpriceusdotd" />
-          </div>
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Upload car images</p></label
-            >
-            <input
-              class="inputimg"
-              placeholder=""
-              type="file"
-              @input="imagePicture1($event.target.files[0])"
-              accept="image/*"
-              required
-            />
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Upload the main image</p></label
-            >
-            <input
-              class="inputimg"
-              placeholder=""
-              type="file"
-              @input="imagePicture2($event.target.files[0])"
-              accept="image/*"
-              required
-            />
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Upload the cover image</p></label
-            >
-            <input
-              class="inputimg"
-              placeholder=""
-              type="file"
-              @input="imagePicture3($event.target.files[0])"
-              accept="image/*"
-              required
-            />
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Inclusive</p></label
-            >
-            <input class="chek" type="checkbox" v-model="inputinclusive" />
-          </div>
+                <div class="col-span-2">
+                  <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Model *</label>
+                  <select @input="modelinput($event.target.value)" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option  v-for="item in models" :key="item" :value='item.id'>{{ item.name }}</option>
+                  </select>
+                </div>
+              
+                <div class="col-span-2">
+                  <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Location *</label>
+                  <select @input="locationinput($event.target.value)" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option v-for="item in location" :key="item" :value='item.id' >{{ item.name }}</option>
+                  </select>
+                </div>
+              
+                <div class="col-span-2">
+                  <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">City *</label>
+                  <select @input="cityinput($event.target.value)" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option v-for="item in city" :key="item" :value='item.id' >{{ item.name }}</option>
+                  </select>
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Color *</label>
+                  <input v-model="inputcolor" type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Year *</label>
+                  <input v-model="inputyear" type="number" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seconds *</label>
+                  <input v-model="inputseconds" type="number" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Speed *</label>
+                  <input v-model="inputspeed" type="number" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Max people *</label>
+                  <select @input="peopleinput($event.target.value)" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option value="" disabled selected>Select People</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="auto">auto</option>
+                  </select>                
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Motor *</label>
+                  <input v-model="inputmotor" type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Transmission *</label>
+                  <select @input="transmissioninput($event.target.value)" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option value="" disabled selected>Select transmission</option>
+                    <option value="Mechanics">Mechanics</option>
+                    <option value="Automatic box">Automatic box</option>
+                    <option value="Mechanics and Automatic">Mechanics and Automatic</option>
+                    <option value="Electric">Electric</option>
+                    <option value="default">default</option>
+                  </select> 
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Drive side *</label>
+                  <input v-model="inputdrive" type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fuel *</label>
+                  <select @input="fuelinput($event.target.value)" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option value="" disabled selected>Select Fuel</option>
+                    <option value="Gas cylinder">Gas cylinder</option>
+                    <option value="Gasoline tank">Gasoline tank</option>
+                    <option value="Methane cylinder">Methane cylinder</option>
+                    <option value="Electric battery">Electric battery</option>
+                    <option value="default">default</option>
+                  </select> 
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Limit per day *</label>
+                  <input v-model="inputlimit" type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deposit *</label>
+                  <input v-model="inputdeposit" type="number" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Premium Protection Price *</label>
+                  <input v-model="inputpremium" type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price in AED *</label>
+                  <input v-model="inputpriceead" type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price in AED (Otd) *</label>
+                  <input v-model="inputpriceeadotd" type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price in USD *</label>
+                  <input v-model="inputpriceusd" type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price in USD (Otd) *</label>
+                  <input v-model="inputpriceusdotd" type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Upload car image *</label>
+                  <input @input="imagePicture1($event.target.files[0])" accept="image/*" type="file" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Upload the main image *</label>
+                  <input @input="imagePicture2($event.target.files[0])" accept="image/*" type="file" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Upload the cover image *</label>
+                  <input @input="imagePicture3($event.target.files[0])" accept="image/*" type="file" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="flex items-center mb-4">
+                  <input v-model="inputinclusive" type="checkbox" required value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                  <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Inclusive</label>
+                </div>
 
               </div>
               <button type="submit" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -414,7 +244,7 @@
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                     </svg>
                     <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete this product?</h3>
-                    <button data-modal-hide="popup-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                    <button @click="deleteCars()" data-modal-hide="popup-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
                         Yes, I'm sure
                     </button>
                     <button @click="modalDel = false" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">No, cancel</button>
@@ -439,13 +269,144 @@
                   </button>
               </div>
               <form @submit.prevent="editCars" class="p-4 md:p-5">
-                  <div class="grid gap-4 mb-4 grid-cols-2">
-                    <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Category</p></label
-            >
-            <select
+                <div class="grid gap-4 mb-4 grid-cols-2"> 
+                <div class="col-span-2">
+                  <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category *</label>
+                  <select required @input="categoryinput($event.target.value)" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option  v-for="item in category" :key="item" :value='item.id'>{{ item.name_en }}</option>  
+                  </select>
+                </div>
+                <div class="col-span-2">
+                  <label for="brand" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Brand *</label>
+                  <select @input="brandinput($event.target.value)" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option  v-for="item in brands" :key="item" :value='item.id'>{{ item.title }}</option>
+                  </select>
+                </div>
+              
+                <div class="col-span-2">
+                  <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Model *</label>
+                  <select @input="modelinput($event.target.value)" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option  v-for="item in models" :key="item" :value='item.id'>{{ item.name }}</option>
+                  </select>
+                </div>
+              
+                <div class="col-span-2">
+                  <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Location *</label>
+                  <select @input="locationinput($event.target.value)" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option v-for="item in location" :key="item" :value='item.id' >{{ item.name }}</option>
+                  </select>
+                </div>
+              
+                <div class="col-span-2">
+                  <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">City *</label>
+                  <select @input="cityinput($event.target.value)" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option v-for="item in city" :key="item" :value='item.id' >{{ item.name }}</option>
+                  </select>
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Color *</label>
+                  <input v-model="inputcolor" type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Year *</label>
+                  <input v-model="inputyear" type="number" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seconds *</label>
+                  <input v-model="inputseconds" type="number" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Speed *</label>
+                  <input v-model="inputspeed" type="number" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Max people *</label>
+                  <select @input="peopleinput($event.target.value)" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option value="" disabled selected>Select People</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="auto">auto</option>
+                  </select>                
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Motor *</label>
+                  <input v-model="inputmotor" type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Transmission *</label>
+                  <select @input="transmissioninput($event.target.value)" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option value="" disabled selected>Select transmission</option>
+                    <option value="Mechanics">Mechanics</option>
+                    <option value="Automatic box">Automatic box</option>
+                    <option value="Mechanics and Automatic">Mechanics and Automatic</option>
+                    <option value="Electric">Electric</option>
+                    <option value="default">default</option>
+                  </select> 
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Drive side *</label>
+                  <input v-model="inputdrive" type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fuel *</label>
+                  <select @input="fuelinput($event.target.value)" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option value="" disabled selected>Select Fuel</option>
+                    <option value="Gas cylinder">Gas cylinder</option>
+                    <option value="Gasoline tank">Gasoline tank</option>
+                    <option value="Methane cylinder">Methane cylinder</option>
+                    <option value="Electric battery">Electric battery</option>
+                    <option value="default">default</option>
+                  </select> 
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Limit per day *</label>
+                  <input v-model="inputlimit" type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deposit *</label>
+                  <input v-model="inputdeposit" type="number" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Premium Protection Price *</label>
+                  <input v-model="inputpremium" type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price in AED *</label>
+                  <input v-model="inputpriceead" type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price in AED (Otd) *</label>
+                  <input v-model="inputpriceeadotd" type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price in USD *</label>
+                  <input v-model="inputpriceusd" type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price in USD (Otd) *</label>
+                  <input v-model="inputpriceusdotd" type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Upload car image *</label>
+                  <input @input="imagePicture1($event.target.files[0])" accept="image/*" type="file" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Upload the main image *</label>
+                  <input @input="imagePicture2($event.target.files[0])" accept="image/*" type="file" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="col-span-2">
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Upload the cover image *</label>
+                  <input @input="imagePicture3($event.target.files[0])" accept="image/*" type="file" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="flex items-center mb-4">
+                  <input v-model="inputinclusive" type="checkbox" required value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                  <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Inclusive</label>
+                </div>
+              <!-- <select
               required
               name=""
               id=""
@@ -454,40 +415,7 @@
             >
             <option value="" disabled selected hidden>{{ category[indextovar]?.name_en }}</option>
             <option  v-for="item in category" :key="item" :value='item.id'>{{ item?.name_en }}</option>  
-            </select>
-          </div>
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Brand</p></label
-            >
-            <select
-              required
-              name=""
-              id=""
-              @input="brandinput($event.target.value)"
-            >
-            <option value="" disabled selected hidden>{{ brands[indextovar]?.title }}</option>
-            <option  v-for="item in brands" :key="item" :value='item.id'>{{ item?.title }}</option>  
-    
-            </select>
-          </div>
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Model</p></label
-            >
-            <select
-              required
-              name=""
-              id=""
-              @input="modelinput($event.target.value)"
-            >
-            <option value="" disabled selected hidden>{{ models[indextovar]?.name }}</option>
-            <option  v-for="item in models" :key="item" :value='item.id'>{{ item?.name }}</option>  
-
-            </select>
-          </div>
+            </select> -->
 
           <!-- <div class="forma__card">
             <label for="">
@@ -504,67 +432,7 @@
             <option  v-for="item in location" :key="item" :value='item.id'>{{ item?.name }}</option>  
             </select>
           </div> -->
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>City</p></label
-            >
-            <select
-              required
-              name=""
-              id=""
-              @input="cityinput($event.target.value)"
-            >
-            <option value="" disabled selected hidden>{{ city[indextovar]?.name }}</option>
-            <option  v-for="item in city" :key="item" :value='item.id'>{{ item?.name }}</option>  
-            </select>
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Color</p></label
-            >
-            <input
-              class="colorinput"
-              type="color"
-              value=""
-              v-model="inputcolor"
-
-            />
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Year</p></label
-            >
-            <input type="number"  v-model="inputyear" />
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Seconds</p></label
-            >
-            <input type="number" v-model="inputseconds" />
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Speed</p></label
-            >
-            <input type="number" v-model="inputspeed" />
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Max People</p></label
-            >
-            <select
+            <!-- <select
               required
               name=""
               id=""
@@ -578,124 +446,7 @@
               <option value="6">6</option>
               <option value="7">7</option>
               <option value="auto">auto</option>
-            </select>
-          </div>
-
-         <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Motor</p></label
-            >
-            <input type="text" v-model="inputmotor" />
-          </div>
- 
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Transmission</p></label
-            >
-            <select
-              required
-              name=""
-              id=""
-              @input="transmissioninput($event.target.value)"
-            >
-              <option value="" disabled selected hidden>
-              {{ inputtransmission }}
-              </option>
-              <option value="Mechanics">Mechanics</option>
-              <option value="Automatic box">Automatic box</option>
-              <option value="Mechanics and Automatic">
-                Mechanics and Automatic
-              </option>
-              <option value="Electric">Electric</option>
-              <option value="defauld">defauld</option>
-            </select>
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Drive Side</p></label
-            >
-            <input type="text" v-model="inputdrive" />
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Fuel</p></label
-            >
-            <select
-              required
-              name=""
-              id=""
-              @input="fuelinput($event.target.value)"
-            >
-              <option value="" disabled selected hidden>{{inputfuel}}</option>
-              <option value="Gas cylinder">Gas cylinder</option>
-              <option value="Gasoline tank">Gasoline tank</option>
-              <option value="Methane cylinder">Methane cylinder</option>
-              <option value="Electric battery">Electric battery</option>
-              <option value="defauld">defauld</option>
-            </select>
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Limit Per Day</p></label
-            >
-            <input type="number" v-model="inputlimit" />
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Deposit</p></label
-            >
-            <input type="number" v-model="inputdeposit" />
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Premium Protection Price</p></label
-            >
-            <input type="number" v-model="inputpremium" />
-          </div>
-
-          <!-- <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Price in AED</p></label
-            >
-            <input type="text" v-model="inputpriceead" />
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Price in AED (Otd)</p></label
-            >
-            <input type="text" v-model="inputpriceeadotd" />
-          </div> -->
-
-          <!-- <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Price in USD</p></label
-            >
-            <input type="text" v-model="inputpriceusd" />
-          </div>
-
-          <div class="forma__card">
-            <label for="">
-              <span>*</span>
-              <p>Price in USD(Otd)</p></label
-            >
-            <input type="text" v-model="inputpriceusdotd" />
-          </div> -->
+            </select> -->
           <!-- <div class="forma__card">
             <label for="">
               <span>*</span>
@@ -765,6 +516,7 @@
                   </button>
               </form>
           </div>
+          
       </div>
   </div> 
 </Teleport>
@@ -773,19 +525,27 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 const modal = ref(false)
 const modalDel = ref(false)
 const modalEdit = ref(false)
 const products = ref([]);
-// const color = ref('')
-// const brand = ref('')
-// const model = ref('')
+
 const productId  = ref('')
-const category = ref('')
-const location = ref('')
 const store = useStore()
 const accessToken = computed(()=> store.getters.getToken) 
+
+const openDelModal = (id) =>{
+      productId.value = id;
+      modalDel.value = true;
+  }
+  
+  const closeDelModal = () =>{
+      productId.value = null;
+      modalDel.value = false;
+  }
 
 const inputcategory = ref("");
 function categoryinput(item) {
@@ -868,6 +628,84 @@ const fetchCars = async () => {
 
 fetchCars();
 
+const category = ref('')
+const fetchCategories = async () => {
+    try {
+        const res = await fetch("https://autoapi.dezinfeksiyatashkent.uz/api/categories");
+        if (!res.ok) {
+            throw new Error(`HTTP xato: ${res.status}`);
+        }
+        const data = await res.json();
+        category.value = data?.data;
+    } catch (error) {
+        console.error('Error:', error);
+    }
+};
+fetchCategories();
+
+const brands = ref('')
+const fetchBrands = async () => {
+    try {
+        const res = await fetch("https://autoapi.dezinfeksiyatashkent.uz/api/brands");
+        if (!res.ok) {
+            throw new Error(`HTTP xato: ${res.status}`);
+        }
+        const data = await res.json();
+        brands.value = data?.data;
+    } catch (error) {
+        console.error('Error:', error);
+    }
+};
+fetchBrands();
+
+const models = ref('')
+const fetchModels = async () => {
+    try {
+        const res = await fetch("https://autoapi.dezinfeksiyatashkent.uz/api/models");
+        if (!res.ok) {
+            throw new Error(`HTTP xato: ${res.status}`);
+        }
+        const data = await res.json();
+        models.value = data?.data;
+    } catch (error) {
+        console.error('Error:', error);
+    }
+};
+
+fetchModels();
+
+const location = ref('')
+const fetchLocations = async () => {
+      try {
+          const res = await fetch("https://autoapi.dezinfeksiyatashkent.uz/api/locations");
+          if (!res.ok) {
+              throw new Error(`HTTP xato: ${res.status}`);
+          }
+          const data = await res.json();
+          location.value = data?.data;
+      } catch (error) {
+          console.error('Error:', error);
+      }
+  };
+  
+fetchLocations();
+
+const city = ref('')
+const fetchCities = async () => {
+    try {
+        const res = await fetch("https://autoapi.dezinfeksiyatashkent.uz/api/cities");
+        if (!res.ok) {
+            throw new Error(`HTTP xato: ${res.status}`);
+        }
+        const data = await res.json();
+        city.value = data?.data;
+    } catch (error) {
+        console.error('Error:', error);
+    }
+};
+
+fetchCities();
+
 const submit = () => {
   const formData = new FormData();
   formData.append("brand_id", inputbrand.value);
@@ -907,12 +745,70 @@ const submit = () => {
     .then((res) => {
       if (res.success) {
         fetchCars();
+        toast(`Muvaffaqiyatli qo'shildi`, {
+          "type": "success",
+          "position": "top-center",
+          "autoClose": 2500,
+          "transition": "flip",
+          "dangerouslyHTMLString": true
+        })
+      }else{
+        toast(`Xatolik! ${res.statusText}`, {
+              "type": "error",
+              "position": "top-center",
+              "autoClose": 2500,
+              "transition": "flip",
+              "dangerouslyHTMLString": true
+            })
       }
     })
-    .catch((err) => {
-      console.log(err.message);
+    .catch((err) => {toast(`Xatolik! ${err.message}`, {
+              "type": "error",
+              "position": "top-center",
+              "autoClose": 2500,
+              "transition": "flip",
+              "dangerouslyHTMLString": true
+            })
     });
 };
+
+const deleteCars = async () =>{
+      try{
+          const response = await fetch(`https://autoapi.dezinfeksiyatashkent.uz/api/cars/${productId.value}`,{
+              method: 'DELETE',
+              headers: {
+                  'Authorization': `Bearer ${accessToken.value}`,
+                  'Cache-Control': 'no-cache'
+              }
+          });
+          if (response.ok) {
+              products.value = products.value.filter(product => product.id !== productId.value);
+              fetchLocations();
+              closeDelModal();
+              toast(`Muvaffaqiyatli o'chirildi`, {
+                "type": "info",
+                "position": "top-center",
+                "autoClose": 2500,
+                "transition": "flip",
+                "dangerouslyHTMLString": true
+              })
+          }else{toast(`Xatolik! ${response.statusText}`, {
+              "type": "error",
+              "position": "top-center",
+              "autoClose": 2500,
+              "transition": "flip",
+              "dangerouslyHTMLString": true
+            })
+          }
+      }catch (error) {toast(`Xatolik! ${error.message}`, {
+              "type": "error",
+              "position": "top-center",
+              "autoClose": 2500,
+              "transition": "flip",
+              "dangerouslyHTMLString": true
+            })
+      }
+  }
 
 const data = ref({
   brand_id: "",
@@ -1051,10 +947,23 @@ const editCars = () => {
       if (res.success) {
         modalEdit(false);
         fetchCars();
+        toast(`Muvaffaqiyatli tahrirlandi`, {
+          "type": "success",
+          "position": "top-center",
+          "autoClose": 2500,
+          "transition": "flip",
+          "dangerouslyHTMLString": true
+        })
       }
     })
     .catch((error) => {
-      console.error("error:", error)
+      toast(`Xatolik! ${error.message}`, {
+              "type": "error",
+              "position": "top-center",
+              "autoClose": 2500,
+              "transition": "flip",
+              "dangerouslyHTMLString": true
+            })
     });
 };
 

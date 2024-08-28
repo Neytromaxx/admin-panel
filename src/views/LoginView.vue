@@ -23,7 +23,8 @@
 import router from "@/router";
 import { ref } from "vue";
 import { useStore } from "vuex";
-
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 const user = ref('')
 const pass = ref('')
@@ -40,19 +41,41 @@ function submit(){
        }
     })
     .then((data) => data.json())
-    .then((data) =>{
-        if(data?.success){
+    .then((data) => {
+        if (data?.success) {
             localStorage.setItem('accessToken', data?.data?.tokens?.accessToken?.token)
-            const accessToken = localStorage.getItem(('accessToken'))
+            const accessToken = localStorage.getItem('accessToken')
             store.dispatch('updateToken', accessToken)
+            toast("Muvaffaqiyatli kirish!", {
+                type: "success",
+                "autoClose": 2500,
+                position: "top-center",
+                transition: "flip",
+            });
             router.push('/home/categories')
-        }
-        else{
-            alert('user yoki parol xato!')
+        } else {
+            toast("User yoki parol xato!", {
+                type: "error",
+                position: "top-center",
+                transition: "flip",
+            });
             user.value = ''
             pass.value = ''
         }
-    })
+    });
+    // .then((data) =>{
+    //     if(data?.success){
+    //         localStorage.setItem('accessToken', data?.data?.tokens?.accessToken?.token)
+    //         const accessToken = localStorage.getItem(('accessToken'))
+    //         store.dispatch('updateToken', accessToken)
+    //         router.push('/home/categories')
+    //     }
+    //     else{
+    //         alert('user yoki parol xato!')
+    //         user.value = ''
+    //         pass.value = ''
+    //     }
+    // })
 }
 
 

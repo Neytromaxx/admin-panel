@@ -156,6 +156,8 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 const modal = ref(false)
 const modalDel = ref(false)
@@ -250,10 +252,31 @@ const submit = () => {
         fetchBrands();
         title.value = "";
         picFile.value = "";
+        toast(`Muvaffaqiyatli qo'shildi`, {
+          "type": "success",
+          "position": "top-center",
+          "autoClose": 2500,
+          "transition": "flip",
+          "dangerouslyHTMLString": true
+        })
+      }else{
+        toast(`Xatolik! ${res.message}`, {
+              "type": "error",
+              "position": "top-center",
+              "autoClose": 2500,
+              "transition": "flip",
+              "dangerouslyHTMLString": true
+            })
       }
     })
     .catch((err) => {
-      console.log(err.message);
+      toast(`Xatolik! ${err}`, {
+              "type": "error",
+              "position": "top-center",
+              "autoClose": 2500,
+              "transition": "flip",
+              "dangerouslyHTMLString": true
+            })
     });
 };
 
@@ -270,12 +293,31 @@ const deleteBrands = async () =>{
             products.value = products.value.filter(product => product.id !== productId.value);
             fetchBrands();
             closeDelModal();
+            toast(`Muvaffaqiyatli qo'shildi`, {
+              "type": "info",
+              "position": "top-center",
+              "autoClose": 2500,
+              "transition": "flip",
+              "dangerouslyHTMLString": true
+            })
         }
         else{
-            console.error('Error:', response.status);
+            toast(`Xatolik! ${response.statusText}`, {
+              "type": "error",
+              "position": "top-center",
+              "autoClose": 2500,
+              "transition": "flip",
+              "dangerouslyHTMLString": true
+            })
         }
     }catch (error) {
-    console.error('Error:', error.message);
+        toast(`Xatolik! ${error.message}`, {
+              "type": "error",
+              "position": "top-center",
+              "autoClose": 2500,
+              "transition": "flip",
+              "dangerouslyHTMLString": true
+            })
 }
 }
 
@@ -296,11 +338,30 @@ const editBrands = async () =>{
         if (result.success) {
             fetchBrands();
             modalEdit.value = false;
+            toast(`Muvaffaqiyatli tahrirlandi`, {
+              "type": "success",
+              "position": "top-center",
+              "autoClose": 2500,
+              "transition": "flip",
+              "dangerouslyHTMLString": true
+            })
         }else{
-            console.error('Error:', result.message);
+            toast(`Xatolik! ${result.statusText}`, {
+              "type": "error",
+              "position": "top-center",
+              "autoClose": 2500,
+              "transition": "flip",
+              "dangerouslyHTMLString": true
+            })
         }
-    }catch (error) {
-        console.error('Error:', error.message);
+    }catch (error) { 
+        toast(`Xatolik! ${error.message}`, {
+              "type": "error",
+              "position": "top-center",
+              "autoClose": 2500,
+              "transition": "flip",
+              "dangerouslyHTMLString": true
+            })
     }
 }
 </script>
